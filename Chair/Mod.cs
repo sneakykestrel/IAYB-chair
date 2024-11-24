@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
+using System.Reflection;
 using System.IO;
 
 using HarmonyLib;
@@ -11,9 +13,8 @@ using BepInEx.Unity.Mono;
 using BepInEx.Configuration;
 
 using UnityEngine;
-using Sounds;
-using System.Collections;
 using UnityEngine.Scripting;
+using Sounds;
 using Projectiles;
 
 #pragma warning disable 0618 //shut up unity
@@ -25,7 +26,7 @@ namespace Chair
         public const string pluginGuid = "kestrel.iamyourbeast.chair";
         public const string pluginName = "Chair";
         public const string pluginVersion = "1.0.0";
-        static string pluginPath = Path.Combine(Paths.PluginPath, "Chair");
+        static string pluginPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
         static string sfxPath = Path.Combine(pluginPath, "hitsfx.ogg");
 
         static Shader defaultShader = Shader.Find("Universal Render Pipeline/Lit");
@@ -36,10 +37,14 @@ namespace Chair
 
         static AssetBundle bundle;
 
+        public static ConfigEntry<bool> funnyRagdoll;
+
         public void Awake() {
             bundle = AssetBundle.LoadFromFile(Path.Combine(pluginPath, "chair"));
             if (bundle == null) Logger.LogError("Failed to load assetbundle. :c");
             else Logger.LogMessage("Loaded AssetBundlle! chair time");
+
+            funnyRagdoll = Config.Bind("Toggles", "Funny Ragdolls", true, "Enable/disable funny ragdoll fling. if you turn this off you hate fun and you also suck and are mean and bad and evil");
 
             if (File.Exists(sfxPath)) {
                 Logger.LogInfo("Loading custom hit sfx...");
@@ -125,7 +130,7 @@ namespace Chair
             [HarmonyPrefix]
             public static void Prefix(SpherecastProjectile __instance, ref float ___ragdollForce, ref ProjectileInformation ___projectileInformation) {
                 if (___projectileInformation.GetPenetrationType() == ProjectileInformation.PenetrationType.Dull && __instance.GetCollisionType() == SpherecastProjectile.CollisionType.AllTargets)
-                    ___ragdollForce *= 3;
+                    if (funnyRagdoll.Value) ___ragdollForce *= 3;
             }
         }
     }

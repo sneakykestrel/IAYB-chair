@@ -102,11 +102,17 @@ namespace Chair
         public class Collide
         {
             [HarmonyPostfix]
-            public static void Postfix(Collision collision, ref Transform ___weapon) {
-                if (collision.transform.GetComponentInParent<Enemy.Enemy>()) {
-                    UnityEngine.Object.Destroy(___weapon.GetChild(0).gameObject);
-                } else {
-                    ___weapon.GetChild(0).gameObject.GetComponent<MeshRenderer>().material = woodMat;
+            public static void Postfix(Collision collision, Transform ___weapon) {
+                //if this throws then we _probably_ arent looking at a thrown tree bark
+                try {
+                    if (collision.transform.GetComponentInParent<Enemy.Enemy>()) {
+                        UnityEngine.Object.Destroy(___weapon.GetChild(0).gameObject);
+                    } else {
+                        ___weapon.GetChild(0).gameObject.GetComponent<MeshRenderer>().material = woodMat;
+                    }
+                } catch {
+                    //lazy but it works
+                    return;
                 }
             }
         }

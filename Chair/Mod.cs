@@ -25,7 +25,7 @@ namespace Chair
     {
         public const string pluginGuid = "kestrel.iamyourbeast.chair";
         public const string pluginName = "Chair";
-        public const string pluginVersion = "1.0.0";
+        public const string pluginVersion = "1.1.0";
         static string pluginPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
         static string sfxPath = Path.Combine(pluginPath, "hitsfx.ogg");
 

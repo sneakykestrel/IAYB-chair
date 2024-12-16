@@ -31,26 +31,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony">
+    <Reference Include="0Harmony, Version=2.10.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libs\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\Libs\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="BepInEx.Core">
-      <HintPath>..\..\Libs\BepInEx.Core.dll</HintPath>
+    <Reference Include="BepInEx">
+      <HintPath>..\..\Libs\BepInEx.dll</HintPath>
     </Reference>
-    <Reference Include="BepInEx.Preloader.Core">
-      <HintPath>..\..\Libs\BepInEx.Preloader.Core.dll</HintPath>
+    <Reference Include="BepInEx.Harmony">
+      <HintPath>..\..\Libs\BepInEx.Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="BepInEx.Unity.Common">
-      <HintPath>..\..\Libs\BepInEx.Unity.Common.dll</HintPath>
+    <Reference Include="BepInEx.Preloader">
+      <HintPath>..\..\Libs\BepInEx.Preloader.dll</HintPath>
     </Reference>
-    <Reference Include="BepInEx.Unity.Mono">
-      <HintPath>..\..\Libs\BepInEx.Unity.Mono.dll</HintPath>
-    </Reference>
-    <Reference Include="BepInEx.Unity.Mono.Preloader">
-      <HintPath>..\..\Libs\BepInEx.Unity.Mono.Preloader.dll</HintPath>
+    <Reference Include="MonoMod.Utils">
+      <HintPath>..\..\Libs\MonoMod.Utils.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections;
-using System.Reflection;
-using System.IO;
-
-using HarmonyLib;
-using BepInEx;
-using BepInEx.Unity.Mono;
+﻿using BepInEx;
 using BepInEx.Configuration;
-
-using UnityEngine;
-using UnityEngine.Scripting;
-using Sounds;
+using HarmonyLib;
 using Projectiles;
+using Sounds;
+using System.Collections;
+using System.IO;
+using System.Reflection;
+using UnityEngine;
 
 #pragma warning disable 0618 //shut up unity
 namespace Chair
@@ -25,7 +16,7 @@ namespace Chair
     {
         public const string pluginGuid = "kestrel.iamyourbeast.chair";
         public const string pluginName = "Chair";
-        public const string pluginVersion = "1.1.0";
+        public const string pluginVersion = "2.1.0";
         static string pluginPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
         static string sfxPath = Path.Combine(pluginPath, "hitsfx.ogg");
 

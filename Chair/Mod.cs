@@ -32,7 +32,7 @@ namespace Chair
 
         public void Awake() {
             bundle = AssetBundle.LoadFromFile(Path.Combine(pluginPath, "chair"));
-            if (bundle == null) Logger.LogError("Failed to load assetbundle. :c");
+            if (!bundle) Logger.LogError("Failed to load assetbundle. :c");
             else Logger.LogMessage("Loaded AssetBundlle! chair time");
 
             funnyRagdoll = Config.Bind("Toggles", "Funny Ragdolls", true, "Enable/disable funny ragdoll fling. if you turn this off you hate fun and you also suck and are mean and bad and evil");
@@ -48,7 +48,7 @@ namespace Chair
         }
 
         private IEnumerator LoadClip(string path) {
-            WWW www = new WWW("file:///" + path);    
+            var www = new WWW("file:///" + path);    
             customClip = www.GetAudioClip(false);
             while (!customClip.isReadyToPlay)
                 yield return www;
@@ -67,7 +67,7 @@ namespace Chair
                 //shut up. i know its bad
                 var bark = obj.transform.GetChild(0).GetChild(0).GetChild(3).GetChild(0).GetChild(1);
 
-                var nObj = GameObject.Instantiate(bundle.LoadAsset<GameObject>("Chair hand"), bark);
+                var nObj = Object.Instantiate(bundle.LoadAsset<GameObject>("Chair hand"), bark);
                 woodMat = originalBark.GetComponent<SkinnedMeshRenderer>().material;
                 nObj.GetComponent<MeshRenderer>().material = woodMat;
                 originalBark.SetActive(false);
@@ -82,7 +82,7 @@ namespace Chair
             public static void Postfix(WeaponPickup __instance) {
                 if (__instance.GetDebugName() == "Tree Bark") {
                     var obj = __instance.gameObject;
-                    var nObj = GameObject.Instantiate(bundle.LoadAsset<GameObject>("Chair ground"), obj.transform);
+                    var nObj = Object.Instantiate(bundle.LoadAsset<GameObject>("Chair ground"), obj.transform);
                     nObj.GetComponent<MeshRenderer>().material = obj.GetComponent<MeshRenderer>().material;
                     obj.GetComponent<MeshRenderer>().enabled = false;
                 }
@@ -114,9 +114,9 @@ namespace Chair
             [HarmonyPatch(nameof(PlayerWeaponArmed.Initialize))]
             [HarmonyPostfix]
             public static void Postfix(WeaponPickup pickup, PlayerWeaponArmed __instance) {
-                if (pickup.GetDebugName() == "Tree Bark" && customClip != null) {
-                    GameObject sObj = Traverse.Create(__instance).Field("SFXImpact").GetValue() as GameObject;
-                    sObj.GetComponent<SoundObject>().SetClip(customClip);
+                if (pickup.GetDebugName() == "Tree Bark" && customClip) {
+                    var sObj = (__instance as PlayerMeleeArmed)?.SFXImpact;
+                    if (sObj) sObj.GetComponent<SoundObject>().SetClip(customClip);
                 }
             }
         }
@@ -126,8 +126,11 @@ namespace Chair
         {
             [HarmonyPrefix]
             public static void Prefix(SpherecastProjectile __instance, ref float ___ragdollForce, ref ProjectileInformation ___projectileInformation) {
-                if (___projectileInformation.GetPenetrationType() == ProjectileInformation.PenetrationType.Dull && __instance.GetCollisionType() == SpherecastProjectile.CollisionType.AllTargets)
-                    if (funnyRagdoll.Value) ___ragdollForce *= 3;
+                if (funnyRagdoll.Value
+                    && ___projectileInformation.GetPenetrationType() == ProjectileInformation.PenetrationType.Dull
+                    && __instance.GetCollisionType() == SpherecastProjectile.CollisionType.AllTargets) {
+                    ___ragdollForce *= 3;
+                }
             }
         }
     }
